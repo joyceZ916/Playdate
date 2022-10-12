@@ -2,7 +2,9 @@ package com.qinzan.playdate.service;
 
 
 import com.qinzan.playdate.exception.UserAlreadyExistException;
+import com.qinzan.playdate.model.Authority;
 import com.qinzan.playdate.model.User;
+import com.qinzan.playdate.repository.AuthorityRepository;
 import com.qinzan.playdate.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 public class RegisterService {
     private UserRepository userRepository;
+
+    private AuthorityRepository authorityRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public RegisterService(UserRepository userRepository, AuthorityRepository authorityRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -29,5 +34,6 @@ public class RegisterService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        authorityRepository.save(new Authority(user.getPhoneNumber(), ""));
     }
 }
