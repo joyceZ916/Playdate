@@ -20,10 +20,17 @@ public class PlaydateController {
      }
 
 
-    @GetMapping(value = "/playdates")
-    public List<Playdate> listPlaydates(Principal principal) {
+    @GetMapping(value = "/myplaydates")
+    public List<Playdate> listMyPlaydates(Principal principal) {
         return playdateService.listByUser(principal.getName());
     }
+
+    @GetMapping(value = "/playdates")
+    public List<Playdate> listVisiblePlaydates() {
+        return playdateService.listVisible();
+    }
+
+
 
     @GetMapping(value = "/playdates/{playdateId}")
     public Playdate getPlaydate(@PathVariable Long playdateId, Principal principal) {
@@ -32,28 +39,37 @@ public class PlaydateController {
 
     @PostMapping("/playdates")
     public void addPlaydate(
-            @RequestParam("date") LocalDate date,
-            @RequestParam("start_time")LocalTime startTime,
-            @RequestParam("end_time")LocalTime endTime,
-            @RequestParam("visibility") boolean visibility,
-            @RequestParam("location") String location,
-            @RequestParam("age") String age,
+            @RequestBody AddPlaydateBody playdateBody,
             Principal principal) {
 
         Playdate playdate = new Playdate.Builder()
-                .setDate(date)
-                .setStartTime(startTime)
-                .setEndTime(endTime)
-                .setVisibility(visibility)
-                .setLocation(location)
-                .setAge(age)
-                .setUser(new User.Builder().setPhoneNumber(principal.getName()).build())
+                .setDate(playdateBody.date)
+                .setStartTime(playdateBody.startTime)
+                .setEndTime(playdateBody.endTime)
+                .setVisibility(playdateBody.visibility)
+                .setLocation(playdateBody.location)
+                .setAge(playdateBody.age)
+                .setUser(new User.Builder().setUsername(principal.getName()).build())
                 .build();
+        playdateService.add(playdate);
     }
 
-    @DeleteMapping("/stays/{stayId}")
+    @DeleteMapping("/playdates/{playdateId}")
     public void deletePlaydate(@PathVariable Long playdateId, Principal principal) {
         playdateService.delete(playdateId, principal.getName());
     }
 
+    @PutMapping("/playdates/{playdateId}")
+    public void updatePlaydate(@PathVariable Long playdateId, @RequestBody UpdatePlaydateBody updatePlaydateBody, Principal principal) {
+        playdateService.update(
+                playdateId,
+                principal.getName(),
+                updatePlaydateBody.getDate(),
+                updatePlaydateBody.getStartTime(),
+                updatePlaydateBody.getEndTime(),
+                updatePlaydateBody.isVisibility(),
+                updatePlaydateBody.getLocation(),
+                updatePlaydateBody.getAge()
+        );
+    }
 }

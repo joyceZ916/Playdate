@@ -28,12 +28,13 @@ public class RegisterService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void add(User user) throws UserAlreadyExistException {
-        if (userRepository.existsById(user.getPhoneNumber())) {
+        if (userRepository.existsById(user.getUsername())) {
             throw new UserAlreadyExistException("User already exists");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
         userRepository.save(user);
-        authorityRepository.save(new Authority(user.getPhoneNumber(), ""));
+        authorityRepository.save(new Authority(user.getUsername(), "user"));
     }
 }

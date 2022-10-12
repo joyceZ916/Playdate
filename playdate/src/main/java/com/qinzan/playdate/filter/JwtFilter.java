@@ -43,12 +43,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (jwt != null && jwtUtil.validateToken(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            String phoneNumber = jwtUtil.extractUsername(jwt);
-            Authority authority = authorityRepository.findById(phoneNumber).orElse(null);
+            String username = jwtUtil.extractUsername(jwt);
+            Authority authority = authorityRepository.findById(username).orElse(null);
             if (authority != null) {
                 List<GrantedAuthority> grantedAuthorities = Arrays.asList(new GrantedAuthority[]{new SimpleGrantedAuthority(authority.getAuthority())});
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        phoneNumber, null, grantedAuthorities);
+                        username, null, grantedAuthorities);
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }

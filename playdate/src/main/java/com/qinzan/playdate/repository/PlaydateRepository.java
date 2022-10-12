@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface PlaydateRepository extends JpaRepository<Playdate, Long> {
     List<Playdate> findByUser(User user);
+    List<Playdate> findByVisibility(boolean visibility);
     List<Playdate> findAll(Specification<Playdate> specification);
     Playdate findByIdAndUser(Long id, User user);
 }

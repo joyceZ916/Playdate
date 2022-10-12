@@ -45,7 +45,7 @@ public class Playdate implements Serializable {
     private String age;
 
     @ManyToOne
-    @JoinColumn(name = "phone_number")
+    @JoinColumn(name = "username")
     private User user;
 
 
@@ -81,6 +81,11 @@ public class Playdate implements Serializable {
     public Playdate setUser(User user) {
         this.user = user;
         return this;
+    }
+
+    @PreRemove
+    private void preRemove() {
+        user.playdateList.remove(this);
     }
 
     public static class Builder {

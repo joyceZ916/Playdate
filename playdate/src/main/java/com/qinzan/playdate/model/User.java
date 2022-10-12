@@ -18,16 +18,18 @@ import java.util.List;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @JsonProperty("phoneNumber")
-    private String phoneNumber;
+//    @JsonProperty("phoneNumber")
+//    private String phoneNumber;
+    @JsonProperty("username")
+    private String username;
 
     @JsonIgnore
     @NotNull
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("name")
-    private String name;
+//    @JsonProperty("name")
+//    private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="user")
     @Fetch(FetchMode.SUBSELECT)
@@ -37,17 +39,16 @@ public class User implements Serializable {
     public User() {}
 
     private User(Builder builder) {
-        this.phoneNumber = builder.phoneNumber;
+        this.username = builder.username;
         this.password = builder.password;
-        this.name = builder.name;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getUsername() {
+        return username;
     }
 
-    public User setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public User setUsername(String username) {
+        this.username = username;
         return this;
     }
 
@@ -60,37 +61,58 @@ public class User implements Serializable {
         return this;
     }
 
-    public String getName() {
-        return name;
+    @JsonIgnore
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public User setName(String name) {
-        this.name = name;
+    public User setEnabled(boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
+//
+//    public String getName() {
+//        return name;
+//    }
+
+//    public User setName(String name) {
+//        this.name = name;
+//        return this;
+//    }
 
     public static class Builder {
-        @JsonProperty("phoneNumber")
-        private String phoneNumber;
+//        @JsonProperty("phoneNumber")
+//        private String phoneNumber;
+
+
+        @JsonProperty("username")
+        private String username;
 
         @JsonProperty("password")
         private String password;
 
-        @JsonProperty("name")
-        private String name;
+        @JsonProperty("enabled")
+        private boolean enabled;
 
         public Builder() {
         }
 
-        public Builder setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public Builder setUsername(String username) {
+            this.username = username;
             return this;
         }
 
-        public Builder setName(String name) {
-            this.name = name;
+        public Builder setEnabled(boolean enabled) {
+            this.enabled = enabled;
             return this;
         }
+
+//        public Builder setName(String name) {
+//            this.name = name;
+//            return this;
+//        }
 
         public Builder setPassword(String password) {
             this.password = password;

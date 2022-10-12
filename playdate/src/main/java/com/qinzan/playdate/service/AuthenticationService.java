@@ -27,7 +27,7 @@ public class AuthenticationService {
     public Token authenticate(User user) throws UserNotExistException {
         Authentication auth = null;
         try {
-            auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getPhoneNumber(), user.getPassword()));
+            auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (AuthenticationException exception) {
             throw new UserNotExistException("User Doesn't Exist");
         }
@@ -35,7 +35,7 @@ public class AuthenticationService {
         if (auth == null || !auth.isAuthenticated() ) {
             throw new UserNotExistException("User Doesn't Exist");
         }
-        return new Token(jwtUtil.generateToken(user.getPhoneNumber()));
+        return new Token(jwtUtil.generateToken(user.getUsername()));
     }
 
 }
