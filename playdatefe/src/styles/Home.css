@@ -1,0 +1,31 @@
+.home .container{
+    height: 100%;
+}
+
+.content{
+    background-image: url('../images/playdate01.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+}
+
+.slick-slider{
+    max-width: 90%;
+    margin: 0 auto 40px;
+    color: #fff;
+    height: 100%;
+}
+
+.slick-slide .slide{
+    background-color: rgba(0,0,0,0.5);
+    padding: 0 20px 20px;
+}
+
+.slick-prev{
+    left: -5%;
+}
+
+.slick-next{
+    right: -5%;
+}

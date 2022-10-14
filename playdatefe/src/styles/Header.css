@@ -1,0 +1,86 @@
+.container{
+    max-width: 96%;
+    margin: 0 auto;
+}
+
+header{
+    background-color: #32CD32;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+}
+
+a{
+    text-decoration: none;
+    color: green;
+}
+
+
+
+.header-buttons a{
+    background-color: #fff;
+    padding: 2px 6px;
+    border-radius: 10px;  
+    border: 2px solid #006400; 
+}
+
+.header a:hover{
+
+}
+
+.header h1{
+    font-size: 1.5rem;
+}
+
+.header h1 a{
+    background-color: transparent;
+    text-transform: uppercase;
+    color: #006400;
+    border: none;
+}
+
+.header a:not(:last-child){
+    margin-right: 10px;
+}
+
+.tooltip{
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text{
+    position: absolute;
+    top:44px;
+    right: -10px;
+    font-size: 10px;
+    border: 1px solid #000;
+    padding: 2px;
+    width: 100px;
+    text-align: center;
+    visibility: hidden;
+}
+
+/* making pointer */
+.tooltip-text::before{
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-color: #000;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid black;
+    border-right: 8px solid transparent;
+    border-top: 8px solid transparent;
+    left: 48px;
+    top: -18px
+}
+
+.tooltip:hover .tooltip-text{
+    visibility: visible;
+}
