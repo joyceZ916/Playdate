@@ -5,10 +5,15 @@ import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import Footer from './components/Footer';
 import PlaydatesTabs from "./components/PlaydatesTabs";
+import { useState, createContext } from "react";
+
+export const UserContext = createContext(null);
 
 function App() {
+  const [authenticationToken, setAuthenticationToken] = useState(null);
   return (
     <div className="App">
+      <UserContext.Provider value={{authenticationToken, setAuthenticationToken}} >
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,6 +22,7 @@ function App() {
           <Route path="/playtabs" element={<PlaydatesTabs/>} />
         </Routes>
       </BrowserRouter>
+      </UserContext.Provider>
     </div>
   );
 }

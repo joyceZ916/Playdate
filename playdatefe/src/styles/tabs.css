@@ -32,10 +32,78 @@
   }
   
   .tab-content {
-    display: none;
+    /* display: none; */
     padding: 10px 20px;
   }
   
   .tab-content.active {
     display: block;
+  }
+
+  .contentWrapper form{
+    text-align: center;
+  }
+
+  table{
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  td{
+    border: 1px solid #000;
+    text-align: left;
+    padding: 6px;
+    min-width: 70px;
+  }
+
+  tbody tr:nth-child(odd){
+    background-color: #ccc;
+  }
+
+  .table-button,.table-button button {
+    background-color: transparent;
+  }
+
+  .add-button-wrapper{
+    display: flex;
+    justify-content: end;
+    margin-right: 8%;
+    margin-top: 20px;
+  }
+
+  .myplaydate-wrapper{
+    position: relative;
+  }
+
+  .update-modal, .delete-modal{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .update-modal.show, .delete-modal.show{
+    display:block;
+  }
+
+  span.close{
+    display: block;
+    width: 40px;
+    margin-left: auto;
+    padding-top: 20px;
+  }
+
+  .delete-modal{
+    background-color: #fff;
+  }
+
+  .delete-modal-content{
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .delete-modal-buttons-wrapper button:first-child{
+    margin-right: 20px;
   }

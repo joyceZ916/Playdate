@@ -11,7 +11,6 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     width: 100%;
 }
 
@@ -20,17 +19,22 @@ a{
     color: green;
 }
 
+.header-buttons {
+    position: relative;
+}
 
-
-.header-buttons a{
+.header-buttons a, .header-buttons button{
     background-color: #fff;
     padding: 2px 6px;
     border-radius: 10px;  
     border: 2px solid #006400; 
+    color: green;
+    letter-spacing: normal;
+    font-size: 14px;
 }
 
-.header a:hover{
-
+.header a:hover, .header button:hover{
+    opacity: 0.8;
 }
 
 .header h1{
