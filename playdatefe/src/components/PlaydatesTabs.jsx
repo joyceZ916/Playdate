@@ -12,21 +12,6 @@ const PlaydatesTabs = () => {
     const [updateModal, setUpdateModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const {authenticationToken, setAuthenticationToken} = useContext(UserContext);
-
-
-// API: 
-// http://localhost:8080/playdates
-// Auth: Bearer Token
-// Body
-    // {
-//     "date": "2022-11-27",
-//     "visibility": true,
-//     "startTime": "13:00:00",
-//     "endTime": "16:30:00",
-//     "location": "Excelsior park",
-//     "age": "1.5 years old"
-// }
-
     const [playdates, setPlaydates] = useState(
         {
             date: "",
@@ -36,8 +21,20 @@ const PlaydatesTabs = () => {
             location: "",
             age: ""
         }
+    );
+    const [myPlaydates, setMyPlaydates] = useState([]);
+    const [visiblePlaydates, setVisiblePlaydates] = useState([]);
+    const [updatePlaydate, setUpdatePlaydate] = useState(
+        {
+            id: "",
+            date: playdates.date,
+            visibility: playdates.visibility,
+            startTime: playdates.start_time,
+            endTime: playdates.end_time,
+            location: playdates.location,
+            age: playdates.age
+        }
     )
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -54,28 +51,6 @@ const PlaydatesTabs = () => {
             console.log(err);
         })
     }
-
-    // http://localhost:8080/myplaydates
-    // Auth: Bearer Token
-    // Method: GET
-    // Example res:
-    // [
-    //     {
-    //         "id": 7,
-    //         "user": {
-    //             "password": "$2a$10$NvHnLxYDoMmiFko8R21RP.yuRyOVZY/UpLryHYwNX3hGVQU9kdm0y",
-    //             "username": "john"
-    //         },
-    //         "date": "2022-11-27",
-    //         "start_time": "13:00:00",
-    //         "end_time": "16:30:00",
-    //         "visibility": true,
-    //         "location": "Excelsior park",
-    //         "age": "1.5 years old"
-    //     },
-    // ]
-
-    const [myPlaydates, setMyPlaydates] = useState([]);
     
     useEffect(() => {
         fetch('http://localhost:8080/myplaydates', {
@@ -91,30 +66,6 @@ const PlaydatesTabs = () => {
     }, [authenticationToken])
  
 
-
-    // Only visible playdates
-    // api: http://localhost:8080/playdates
-    // Auth: Bearer Token
-    // Method: GET
-    // Example res:
-    // [
-    //     {
-    //         "id": 7,
-    //         "user": {
-    //             "password": "$2a$10$NvHnLxYDoMmiFko8R21RP.yuRyOVZY/UpLryHYwNX3hGVQU9kdm0y",
-    //             "username": "john"
-    //         },
-    //         "date": "2022-11-27",
-    //         "start_time": "13:00:00",
-    //         "end_time": "16:30:00",
-    //         "visibility": true,
-    //         "location": "Excelsior park",
-    //         "age": "1.5 years old"
-    //     },
-    // ]
-
-    const [visiblePlaydates, setVisiblePlaydates] = useState([]);
-
     useEffect(() => {
         fetch('http://localhost:8080/playdates', {
             method: 'GET',
@@ -125,7 +76,39 @@ const PlaydatesTabs = () => {
         }).then(res => res.json()).then(data => {
             setVisiblePlaydates(data);
         })
-    }, [authenticationToken])
+
+        return () => {
+            setVisiblePlaydates([]);
+        }
+    }, [authenticationToken, deleteModal, updateModal])
+    
+
+    const handleUpdatedForm = (e) => {
+        e.preventDefault();
+        fetch(`http://localhost:8080/playdates/${playdates.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authenticationToken}`
+            },
+            body: JSON.stringify(updatePlaydate)
+        }).then(() => {
+            console.log("Playdate updated");
+        })
+    }
+
+    const handleDeletePlaydate = (e) => {
+        fetch(`http://localhost:8080/playdates/${updatePlaydate.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authenticationToken}`
+            }
+        }).then(() => {
+            alert("Playdate deleted");
+            setDeleteModal(false);
+        })
+    }
 
     return (
         <div className="wrapper">
@@ -166,11 +149,10 @@ const PlaydatesTabs = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="age">Age:</label>
-                        <input type="number" name="age" id="age" value={playdates.age} onChange={(e) => setPlaydates({...playdates, age: e.target.value})} />
+                        <input type="text" name="age" id="age" value={playdates.age} onChange={(e) => setPlaydates({...playdates, age: e.target.value})} />
                     </div>
                     <button type="submit">POST</button>
                 </form>}
-
 
                 {activeTab === 1 &&
                     <div className='myplaydate-wrapper'>
@@ -200,8 +182,14 @@ const PlaydatesTabs = () => {
                                         }</td>
                                         <td>{playdate.location}</td>
                                         <td>{playdate.age}</td>
-                                        <td className='table-button'><button onClick={() => setUpdateModal(true)}>Update</button></td>
-                                    <td className='table-button'><button onClick={() => setDeleteModal(true)}>Delete</button></td>
+                                        <td className='table-button'><button onClick={() => {
+                                            setUpdateModal(true);
+                                            setUpdatePlaydate(playdate);
+                                        }}>Update</button></td>
+                                    <td className='table-button'><button onClick={() => {
+                                        setDeleteModal(true)
+                                        setUpdatePlaydate(playdate);
+                                        }}>Delete</button></td>
                                     </tr>
                                   ))}
                             </tbody>
@@ -213,41 +201,58 @@ const PlaydatesTabs = () => {
                         <div className={updateModal ? "update-modal show" : "update-modal"}>
                             <div className="update-modal-content">
                                
-                                <form className="tab-content active" id="update">
+                                <form className="tab-content active" id="update" onSubmit={handleUpdatedForm}>
                                 <span className="close" onClick={() => setUpdateModal(false)}><AiOutlineClose/></span>
                                     <div className='update-form'>
                                         <div className="form-group">
                                             <label htmlFor="date">Date* :</label>
-                                            <input type="date" name="date" id="date" required />
+                                            <input type="date" name="date" id="date" required value={updatePlaydate.date} onChange={(e) => setUpdatePlaydate({...updatePlaydate, date: e.target.value})} />
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="starttime">Start Time* :</label>
-                                            <input type="starttime" name="starttime" id="starttime" required />
+                                            <input type="starttime" name="starttime" id="starttime" required  value={updatePlaydate.start_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, startTime: e.target.value})}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="endtime">End Time* :</label>
-                                            <input type="endtime" name="endtime" id="endtime" required />
+                                            <input type="endtime" name="endtime" id="endtime" required  value={updatePlaydate.end_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, endTime: e.target.value})}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="visibility">Visibility* :</label>
                                             <div className="radio-group">
-                                                <input type="radio" name="visibility" id="onlyme" value="onlyme" />
+                                                <input type="radio" name="visibility" id="onlyme" 
+                                                value={updatePlaydate.visibility} onChange={(e) => setUpdatePlaydate({...updatePlaydate, visibility: false})} 
+                                                checked={updatePlaydate.visibility == false ? true : false}/>
                                                 <label htmlFor="onlyme">Only me</label>
                                             </div>
                                             <div className="radio-group">
-                                                <input type="radio" name="visibility" id="all" value="all" />
+                                                <input type="radio" name="visibility" id="all" value={updatePlaydate.visibility} onChange={(e) => setUpdatePlaydate({...updatePlaydate, visibility: true})}
+                                                checked={updatePlaydate.visibility == true ? true : false} />
                                                 <label htmlFor="all">all users</label>
                                             </div>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="location">Location:</label>
-                                            <input type="text" name="location" id="location" />
+                                            <input type="text" name="location" id="location"  value={updatePlaydate.location} onChange={(e) => setUpdatePlaydate({...updatePlaydate, location: e.target.value})}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="age">Age:</label>
-                                            <input type="number" name="age" id="age" />
+                                            <input type="text" name="age" id="age" value={updatePlaydate.age} onChange={(e) => setUpdatePlaydate({...updatePlaydate, age: e.target.value})}/>
                                         </div>
-                                        <button type="submit">POST</button>
+                                        <div className='buttons-wrapper'>
+                                            <button type="button" onClick={() => {
+                                                setUpdatePlaydate({
+                                                    ...updatePlaydate,
+                                                    date: updatePlaydate.date,
+                                                    start_time: updatePlaydate.start_time,
+                                                    end_time: updatePlaydate.end_time,
+                                                    visibility: updatePlaydate.visibility,
+                                                    location: updatePlaydate.location,
+                                                    age: updatePlaydate.age
+                                                })
+                                                setUpdateModal(true);
+                                            }}>Undo</button>
+                                            <button type="submit">Update</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -259,7 +264,10 @@ const PlaydatesTabs = () => {
                                     <p>Are you sure to delete this playdate ?</p>
                                     <div className='delete-modal-buttons-wrapper'>
                                         <button className='delete-modal-button' onClick={() => setDeleteModal(false)}>Cancel</button>
-                                        <button className='delete-modal-button' onClick={() => setDeleteModal(true)}>Confirm</button>
+                                        <button className='delete-modal-button' onClick={() => {
+                                            setDeleteModal(true);
+                                            handleDeletePlaydate();
+                                        }}>Confirm</button>
                                     </div>
                                 </div>
                             </div>

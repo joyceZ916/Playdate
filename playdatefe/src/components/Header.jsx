@@ -30,21 +30,12 @@ const Header = () => {
             </div>
           ) : (
             <div className="header-buttons">
-              {/* <Link to="/signup" className="tooltip">Signup
-                <span className="tooltip-text">Want to become a member? Sign up here!</span>
-              </Link>
-              <Link to="/signin" className="tooltip">Sign in
-                <span className="tooltip-text">Already a member? Please sign in here!
-                </span>
-              </Link> */}
               <Tooltip placement="bottom" title={signupText} arrowPointAtCenter>
-                <Link to="/signup">Signup</Link>
+                <Link to="/signup" className="tooltip">Signup</Link>
               </Tooltip>
-              <Tooltip placement="bottom" title={signinText} arrowPointAtCenter>
-                <Link to="/signin">Sign in</Link>
+              <Tooltip placement="bottomRight" title={signinText} arrowPointAtCenter>
+                <Link to="/signin" className="tooltip">Sign in</Link>
               </Tooltip>
-              
-
             </div>
           )
 
