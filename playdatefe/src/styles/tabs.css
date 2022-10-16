@@ -40,8 +40,14 @@
     display: block;
   }
 
-  .contentWrapper form{
-    text-align: center;
+  form.tab-content{
+      max-width: min-content;
+      margin: 0 auto;
+  }
+
+  form label{
+    display: inline-block;
+    min-width: 100px;
   }
 
   table{
@@ -110,4 +116,43 @@
 
   .buttons-wrapper button:first-child{
     margin-right: 20px;
+  }
+
+  .button-primary{
+    background-color: #fff;
+    border: 2px solid #006400;
+    color: green;
+    font-size: 14px;
+    padding: 2px 6px;
+    letter-spacing: normal;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+  .button-primary.undo{
+    margin-left: 20px;
+  }
+
+  .form-group{
+    margin-bottom: 10px;
+  }
+
+  .radio-group{
+    display: flex;
+  }
+
+  .form-button-wrapper{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .radio-group label{
+    min-width: 50px;
+  }
+
+  .radio-group input{
+    margin-right: 3px;
+  }
+
+  form span.close{
+    cursor: pointer;
   }

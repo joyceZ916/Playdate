@@ -19,7 +19,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/playtabs" element={<PlaydatesTabs/>} />
+          
+          {authenticationToken ? <Route path="/playtabs" element={<PlaydatesTabs/>} /> : 
+            <Route path="/" element={<Home /> } />}
+          <Route path="*" element={<Home />} />
         </Routes>
       </BrowserRouter>
       </UserContext.Provider>

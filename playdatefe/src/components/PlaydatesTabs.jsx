@@ -1,7 +1,7 @@
 import Header from './Header';
 import Footer from './Footer';
 import '../styles/tabs.css';
-import { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext, useReducer, useEffect } from 'react';
 import { UserContext } from "../App";
 import { AiOutlineClose} from 'react-icons/ai';
 
@@ -26,15 +26,15 @@ const PlaydatesTabs = () => {
     const [visiblePlaydates, setVisiblePlaydates] = useState([]);
     const [updatePlaydate, setUpdatePlaydate] = useState(
         {
-            id: "",
             date: playdates.date,
             visibility: playdates.visibility,
-            startTime: playdates.start_time,
-            endTime: playdates.end_time,
+            start_time: playdates.start_time,
+            end_time: playdates.end_time,
             location: playdates.location,
             age: playdates.age
         }
     )
+    const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -46,7 +46,8 @@ const PlaydatesTabs = () => {
             },
             body: JSON.stringify(playdates)
         }).then(() => {
-            console.log("Playdate created")
+            forceUpdate();
+            alert("Playdate created");
         }).catch(err => {
             console.log(err);
         })
@@ -62,8 +63,7 @@ const PlaydatesTabs = () => {
         }).then(res => res.json()).then(data => {
             setMyPlaydates(data);
         })
-
-    }, [authenticationToken])
+    }, [authenticationToken, reducerValue])
  
 
     useEffect(() => {
@@ -93,7 +93,9 @@ const PlaydatesTabs = () => {
             },
             body: JSON.stringify(updatePlaydate)
         }).then(() => {
-            console.log("Playdate updated");
+            alert("Playdate updated");
+            forceUpdate();
+            setUpdateModal(false);
         })
     }
 
@@ -106,8 +108,15 @@ const PlaydatesTabs = () => {
             }
         }).then(() => {
             alert("Playdate deleted");
+            forceUpdate();
             setDeleteModal(false);
         })
+    }
+
+    const handleUndo = (e) => {
+        // re rendering the update modal
+        setUpdatePlaydate(playdates);
+        setUpdateModal(true);
     }
 
     return (
@@ -115,8 +124,8 @@ const PlaydatesTabs = () => {
             <Header />
             <div className="buttonWrapper">
                 <button className={activeTab === 0 ? "tab-button active" : "tab-button"} style={{ borderTopLeftRadius: '10px', dataId: 'home' }} onClick={() => setActiveTab(0)}>Post Playdate</button>
-                <button className={activeTab === 1 ? "tab-button active" : "tab-button"} data-id="about" onClick={() => setActiveTab(1)}>About</button>
-                <button className={activeTab === 2 ? "tab-button active" : "tab-button"} style={{ borderTopLeftRadius: '10px', dataId: 'contact' }} onClick={() => setActiveTab(2)}>Contact</button>
+                <button className={activeTab === 1 ? "tab-button active" : "tab-button"} data-id="about" onClick={() => setActiveTab(1)}>My Playdates</button>
+                <button className={activeTab === 2 ? "tab-button active" : "tab-button"} style={{ borderTopLeftRadius: '10px', dataId: 'contact' }} onClick={() => setActiveTab(2)}>All Playdates</button>
             </div>
             <div className="contentWrapper">
                 {activeTab === 0 && <form className="tab-content active" id="home" onSubmit={handleSubmit}>
@@ -126,7 +135,8 @@ const PlaydatesTabs = () => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="starttime">Start Time* :</label>
-                        <input type="starttime" name="starttime" id="starttime" required value={playdates.startTime} onChange={(e) => setPlaydates({...playdates, startTime: e.target.value})} />
+                        <input type="starttime" name="starttime" id="starttime" required value={playdates?.startTime
+                        } onChange={(e) => setPlaydates({...playdates, startTime: e.target.value})} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="endtime">End Time* :</label>
@@ -151,7 +161,9 @@ const PlaydatesTabs = () => {
                         <label htmlFor="age">Age:</label>
                         <input type="text" name="age" id="age" value={playdates.age} onChange={(e) => setPlaydates({...playdates, age: e.target.value})} />
                     </div>
-                    <button type="submit">POST</button>
+                    <div className='form-button-wrapper'>
+                        <button type="submit" className='button-primary'>POST</button>
+                    </div>
                 </form>}
 
                 {activeTab === 1 &&
@@ -184,7 +196,8 @@ const PlaydatesTabs = () => {
                                         <td>{playdate.age}</td>
                                         <td className='table-button'><button onClick={() => {
                                             setUpdateModal(true);
-                                            setUpdatePlaydate(playdate);
+                                            setPlaydates(playdate);
+                                            // setUpdatePlaydate(playdate);
                                         }}>Update</button></td>
                                     <td className='table-button'><button onClick={() => {
                                         setDeleteModal(true)
@@ -210,11 +223,11 @@ const PlaydatesTabs = () => {
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="starttime">Start Time* :</label>
-                                            <input type="starttime" name="starttime" id="starttime" required  value={updatePlaydate.start_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, startTime: e.target.value})}/>
+                                            <input type="starttime" name="starttime" id="starttime" required  value={updatePlaydate?.start_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, start_time: e.target.value})}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="endtime">End Time* :</label>
-                                            <input type="endtime" name="endtime" id="endtime" required  value={updatePlaydate.end_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, endTime: e.target.value})}/>
+                                            <input type="endtime" name="endtime" id="endtime" required  value={updatePlaydate?.end_time} onChange={(e) => setUpdatePlaydate({...updatePlaydate, end_time: e.target.value})}/>
                                         </div>
                                         <div className="form-group">
                                             <label htmlFor="visibility">Visibility* :</label>
@@ -239,19 +252,8 @@ const PlaydatesTabs = () => {
                                             <input type="text" name="age" id="age" value={updatePlaydate.age} onChange={(e) => setUpdatePlaydate({...updatePlaydate, age: e.target.value})}/>
                                         </div>
                                         <div className='buttons-wrapper'>
-                                            <button type="button" onClick={() => {
-                                                setUpdatePlaydate({
-                                                    ...updatePlaydate,
-                                                    date: updatePlaydate.date,
-                                                    start_time: updatePlaydate.start_time,
-                                                    end_time: updatePlaydate.end_time,
-                                                    visibility: updatePlaydate.visibility,
-                                                    location: updatePlaydate.location,
-                                                    age: updatePlaydate.age
-                                                })
-                                                setUpdateModal(true);
-                                            }}>Undo</button>
-                                            <button type="submit">Update</button>
+                                            <button type="button" className='button-primary undo' onClick={handleUndo}>Undo</button>
+                                            <button type="submit" className='button-primary'>Update</button>
                                         </div>
                                     </div>
                                 </form>
