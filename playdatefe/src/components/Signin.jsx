@@ -1,6 +1,6 @@
 import Header from "./Header"
 import Footer from "./Footer"
-import '../styles/signup.css'
+import '../styles/signin.css'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
@@ -36,7 +36,7 @@ const Signin = () => {
     return (
         <div>
             <Header />
-            <div className="signup-content">
+            <div className="signup-content signin">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="username">Username:</label>

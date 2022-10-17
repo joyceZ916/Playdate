@@ -17,6 +17,11 @@
     height: 100%;
 }
 
+.slick-slide .slide h2{
+    color: white;
+    padding: 10px 0 0 10px;
+}
+
 .slick-slide .slide{
     background-color: rgba(0,0,0,0.5);
     padding: 0 20px 20px;

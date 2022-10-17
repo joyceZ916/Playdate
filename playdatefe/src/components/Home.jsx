@@ -23,11 +23,15 @@ const Home = () => {
           <Slider {...settings}>
             <div className="slide">
               <h2>What is PLAYDATE?</h2>
-              <p>PLAYDATE is a service where parents Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe tempora quisquam sit maxime excepturi id perferendis magni natus sapiente temporibus.</p>
+              <p>PLAYDATE is a service where parents/caretakers host playtime for their little ones with other children, supporting and improving their social and emotional development.</p>
             </div>
             <div className="slide">
-              <h2>What is PLAYDATE?</h2>
-              <p>PLAYDATE is a service where parents Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe tempora quisquam sit maxime excepturi id perferendis magni natus sapiente temporibus.</p>
+              <h2>Once signed up, you can sign in to:</h2>
+              <ul>
+                <li>Post a playdate.</li>
+                <li>View, update and delete your playdates.</li>
+                <li>View all users' public playdates information.</li>
+              </ul>
             </div>
           </Slider>
         </div>
