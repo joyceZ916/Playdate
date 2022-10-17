@@ -4,13 +4,6 @@ import Footer from "./Footer"
 import '../styles/signup.css'
 
 const Signup = () => {
-
-    // api http://localhost:8080/register
-    // body: {
-    //     "username": "mary",
-    //     "password": "1234"
-    // }
-
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -41,8 +34,8 @@ const Signup = () => {
                         <label htmlFor="password">Password:</label>
                         <input type="password" id="password" name="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                     </div>
-                    <div className="form-group">
-                        <button type="submit" className="submitBtn">Signup</button>
+                    <div className="form-group signin-signup-wrapper">
+                        <button type="submit" className="submitBtn button-primary">Signup</button>
                     </div>
                 </form>
             </div>

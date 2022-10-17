@@ -1,15 +1,28 @@
+.content-wrapper{
+  padding-top: 30px;
+}
+
+.table-wrapper{
+  position: relative;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
+.table-wrapper.table-wrapper-visible{
+  max-height: 50vh;
+}
+
 .buttonWrapper {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
   }
   
   button {
-    letter-spacing: 3px;
     border: none;
     padding: 10px;
     background-color: #bccbe9;
     color: #232c3d;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.5s;
   }
@@ -53,6 +66,8 @@
   table{
     width: 70%;
     margin: 0 auto;
+    max-height: 60vh;
+    overflow: scroll;
   }
 
   td{
@@ -68,6 +83,7 @@
 
   .table-button,.table-button button {
     background-color: transparent;
+    color: #006400;
   }
 
   .add-button-wrapper{
@@ -155,4 +171,18 @@
 
   form span.close{
     cursor: pointer;
+  }
+
+  .update-form .buttons-wrapper{
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .header-buttons a{
+    padding: 4px 6px;
+  }
+
+  .signin-signup-wrapper{
+    display: flex;
+    justify-content: flex-end;
   }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Route } from "react-router-dom";
 import { UserContext } from "../App";
 import 'antd/dist/antd.css'; 
 import { Tooltip } from 'antd';
@@ -25,6 +25,7 @@ const Header = () => {
           <h1><Link to="/">Playdate</Link></h1>
           {authenticationToken?.length > 0 ? (
             <div className="header-buttons">
+              <Link to="/playtabs">Playdates</Link>
             <button onClick={handleLogout} className="tooltip">Logout
             </button>
             </div>

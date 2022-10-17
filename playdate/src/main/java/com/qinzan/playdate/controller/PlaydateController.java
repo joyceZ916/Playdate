@@ -6,8 +6,6 @@ import com.qinzan.playdate.service.PlaydateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -65,8 +63,8 @@ public class PlaydateController {
                 playdateId,
                 principal.getName(),
                 updatePlaydateBody.getDate(),
-                updatePlaydateBody.getStartTime(),
-                updatePlaydateBody.getEndTime(),
+                updatePlaydateBody.getStart_time(),
+                updatePlaydateBody.getEnd_time(),
                 updatePlaydateBody.isVisibility(),
                 updatePlaydateBody.getLocation(),
                 updatePlaydateBody.getAge()

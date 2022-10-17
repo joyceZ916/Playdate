@@ -6,14 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 
 const Signin = () => {
-
-    // api 
-    // http://localhost:8080/authenticate
-    // body
-    //  {
-    //     "username": "peter",
-    //     "password": "1234"
-    // }
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {authenticationToken, setAuthenticationToken} = useContext(UserContext);
@@ -54,8 +46,8 @@ const Signin = () => {
                         <label htmlFor="password">Password:</label>
                         <input type="password" id="password" name="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                     </div>
-                    <div className="form-group">
-                        <button type="submit" className="submitBtn">Sign in</button>
+                    <div className="form-group signin-signup-wrapper">
+                        <button type="submit" className="submitBtn button-primary">Sign in</button>
                     </div>
                 </form>
             </div>
