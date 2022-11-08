@@ -41,6 +41,9 @@ public class Playdate implements Serializable {
     @JsonProperty("location")
     private String location;
 
+    @JsonProperty("location_link")
+    private String locationLink;
+
     @JsonProperty("age")
     private String age;
 
@@ -58,6 +61,7 @@ public class Playdate implements Serializable {
         this.endTime = builder.endTime;
         this.visibility = builder.visibility;
         this.location = builder.location;
+        this.locationLink = builder.locationLink;
         this.age = builder.age;
         this.user = builder.user;
     }
@@ -72,6 +76,14 @@ public class Playdate implements Serializable {
 
     public LocalTime getStartTime() {
         return startTime;
+    }
+
+    public String getLocationLink() {
+        return locationLink;
+    }
+
+    public void setLocationLink(String locationLink) {
+        this.locationLink = locationLink;
     }
 
     public User getUser() {
@@ -104,6 +116,9 @@ public class Playdate implements Serializable {
         private boolean visibility;
         @JsonProperty("location")
         private String location;
+
+        @JsonProperty("location_link")
+        private String locationLink;
 
         @JsonProperty("age")
         private String age;
@@ -145,6 +160,11 @@ public class Playdate implements Serializable {
 
         public Builder setLocation(String location) {
             this.location = location;
+            return this;
+        }
+
+        public Builder setLocationLink(String locationLink) {
+            this.locationLink = locationLink;
             return this;
         }
 

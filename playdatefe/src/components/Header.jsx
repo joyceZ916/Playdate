@@ -32,7 +32,7 @@ const Header = () => {
           ) : (
             <div className="header-buttons">
               <Tooltip placement="bottom" title={signupText} arrowPointAtCenter>
-                <Link to="/signup" className="tooltip">Signup</Link>
+                <Link to="/signup" className="tooltip">Sign up</Link>
               </Tooltip>
               <Tooltip placement="bottomRight" title={signinText} arrowPointAtCenter>
                 <Link to="/signin" className="tooltip">Sign in</Link>

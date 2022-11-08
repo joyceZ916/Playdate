@@ -35,7 +35,7 @@ const Signup = () => {
                         <input type="password" id="password" name="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                     </div>
                     <div className="form-group signin-signup-wrapper">
-                        <button type="submit" className="submitBtn button-primary">Signup</button>
+                        <button type="submit" className="submitBtn button-primary">Sign up</button>
                     </div>
                 </form>
             </div>

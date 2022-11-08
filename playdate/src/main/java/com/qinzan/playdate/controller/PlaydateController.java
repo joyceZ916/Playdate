@@ -4,7 +4,18 @@ import com.qinzan.playdate.model.Playdate;
 import com.qinzan.playdate.model.User;
 import com.qinzan.playdate.service.PlaydateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
+import org.zeromq.ZMQ;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.security.Principal;
 import java.util.List;
 
@@ -40,15 +51,53 @@ public class PlaydateController {
             @RequestBody AddPlaydateBody playdateBody,
             Principal principal) {
 
+        String location = playdateBody.location;
+        String link = null;
+//        if (location != null && !location.isEmpty() && !location.isBlank()) {
+//            char[] buffer = new char[1024];
+//            try (
+//                    Socket socket = new Socket("127.0.0.1", 5555);
+//                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//                    PrintWriter out = new PrintWriter(socket.getOutputStream())
+//            ) {
+//                out.write(location);
+//                out.flush();
+//                //noinspection ResultOfMethodCallIgnored
+//                int length = in.read(buffer);
+//                link = String.valueOf(buffer).substring(0, length);
+//            } catch (IOException e) {
+//                // ignore
+//            }
+//        }
+
+        if (location != null && !location.isEmpty() && !location.isBlank()) {
+            try (ZContext context = new ZContext()) {
+                ZMQ.Socket socket = context.createSocket(ZMQ.PAIR);
+                socket.connect("tcp://*:5555");
+                socket.send(location.getBytes(), 0);
+                Thread.sleep(100);
+                byte[] reply = socket.recv(0);
+                link = new String(reply, ZMQ.CHARSET);
+                socket.close();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
         Playdate playdate = new Playdate.Builder()
                 .setDate(playdateBody.date)
                 .setStartTime(playdateBody.startTime)
                 .setEndTime(playdateBody.endTime)
                 .setVisibility(playdateBody.visibility)
                 .setLocation(playdateBody.location)
+                .setLocationLink(link)
                 .setAge(playdateBody.age)
                 .setUser(new User.Builder().setUsername(principal.getName()).build())
                 .build();
+
+
+
         playdateService.add(playdate);
     }
 
